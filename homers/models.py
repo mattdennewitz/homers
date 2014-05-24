@@ -12,13 +12,11 @@ class Player(db.Model):
     __tablename__ = 'players'
 
     mlbam_id = db.Column(db.Integer, primary_key=True)
-    team = db.Column(db.Text)
     first_name = db.Column(db.Text)
     last_name = db.Column(db.Text)
 
-    def __init__(self, mlbam_id, team, first_name, last_name):
+    def __init__(self, mlbam_id, first_name, last_name):
         self.mlbam_id = mlbam_id
-        self.team = team
         self.first_name = first_name
         self.last_name = last_name
 
@@ -36,6 +34,8 @@ class Play(db.Model):
     content_id = db.Column(db.Integer, primary_key=True)
     batter_id = db.Column(db.Integer, db.ForeignKey('players.mlbam_id'))
     pitcher_id = db.Column(db.Integer, db.ForeignKey('players.mlbam_id'))
+    batter_team = db.Column(db.String(3))
+    pitcher_team = db.Column(db.String(3))
     play_type = db.Column(db.Text)
     at = db.Column(db.DateTime)
     sv_id = db.Column(db.String(24))
@@ -44,20 +44,17 @@ class Play(db.Model):
     headline = db.Column(db.Text)
     blurb = db.Column(db.Text)
 
-    # batter = db.relationship(
-    #     Player, backref=db.backref('hits', lazy='dynamic'))
-    # pitcher = db.relationship(
-    #     Player, backref=db.backref('pitches', lazy='dynamic'))
+    batter = db.relationship('Player', foreign_keys=batter_id)
+    pitcher = db.relationship('Player', foreign_keys=pitcher_id)
 
-    # batter = db.relationship(Player, foreign_keys=[Play.batter_id],
-    #                          backref=db.backref('hits', lazy='dynamic'))
-    # pitcher = db.relationship(Player, foreign_keys=[Play.pitcher_id],
-    #                          backref=db.backref('hits', lazy='dynamic'))
-
-    def __init__(self, batter_id, pitcher_id, play_type, at, sv_id,
+    def __init__(self, batter_id, pitcher_id,
+                 batter_team, pitcher_team,
+                 play_type, at, sv_id,
                  content_id, headline, blurb):
         self.batter_id = batter_id
+        self.batter_team = batter_team
         self.pitcher_id = pitcher_id
+        self.pitcher_team = pitcher_team
         self.play_type = play_type
         self.sv_id = sv_id
         self.content_id = content_id

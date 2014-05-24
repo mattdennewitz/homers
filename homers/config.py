@@ -9,6 +9,10 @@ DATA_DIR = os.path.realpath(
                  os.pardir,
                  'game-data'))
 
+# app settings
+DAYS_PER_PAGE = 7
+
+
 # allow for config overrides
 try:
     from local_config import *

@@ -25,13 +25,12 @@ def get_player(doc, player_id):
 
     if player is None:
         player = Player(mlbam_id=player_data.get('id'),
-                        team=player_data.get('team_abbrev'),
                         first_name=player_data.get('first'),
                         last_name=player_data.get('last'))
         db.session.add(player)
         db.session.commit()
 
-    return player
+    return (player, player_data.get('team_abbrev'))
 
 
 def import_plays_by_date(for_date=None):
@@ -97,12 +96,14 @@ def import_plays_by_date(for_date=None):
                 continue
 
             # create participants, play
-            batter = get_player(data['players'], atbat.get('batter'))
-            pitcher = get_player(data['players'], atbat.get('pitcher'))
+            batter, b_team = get_player(data['players'], atbat.get('batter'))
+            pitcher, p_team = get_player(data['players'], atbat.get('pitcher'))
 
             play = Play(content_id = content_id,
                         batter_id = batter.mlbam_id,
                         pitcher_id = pitcher.mlbam_id,
+                        batter_team = b_team,
+                        pitcher_team = p_team,
                         play_type = 'Home Run',
                         at = atbat.get('start_tfs_zulu'),
                         sv_id = sv_id,
