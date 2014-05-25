@@ -48,7 +48,7 @@
           </ul>
 
           <div class="load-more">
-            <button ng-click="loadPreviousDate()">
+            <button ng-click="loadPreviousDate()" ng-disabled="loading">
               <em ng-class="{true:'fa fa-refresh fa-spin'}[loading]"></em>
               {$ loading ? "Loading ..." : "Load More"  $}
             </button>
