@@ -15,3 +15,4 @@ requests==2.3.0
 six==1.6.1
 wsgiref==0.1.2
 https://github.com/mattdennewitz/mlbam-utils/archive/develop.zip
+gunicorn
