@@ -1,0 +1,17 @@
+Flask==0.10.1
+Flask-SQLAlchemy==1.0
+Jinja2==2.7.2
+MarkupSafe==0.23
+SQLAlchemy==0.9.4
+Werkzeug==0.9.4
+aniso8601==0.82
+click==1.1
+itsdangerous==0.24
+lxml==3.3.5
+psycopg2==2.5.3
+python-dateutil==2.2
+pytz==2014.3
+requests==2.3.0
+six==1.6.1
+wsgiref==0.1.2
+https://github.com/mattdennewitz/mlbam-utils/archive/develop.zip
