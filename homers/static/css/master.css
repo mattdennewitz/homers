@@ -1,0 +1,77 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    background: #fafafa;
+    font-family: "franklin-gothic-urw", sans-serif;
+    height: 100%;
+}
+
+header {
+    background: #f0f0f0;
+    margin-bottom: 36px;
+    padding: 24px 0;
+}
+
+header span {
+    border-bottom: solid 2px #000;
+    display: inline-block;
+    font-size: 14px;
+}
+
+a {
+    color: #48A890;
+}
+
+a:hover, a:active, a:focus {
+    color: #003030;
+    text-decoration: none;
+}
+
+input[type="date"] {
+    background: transparent;
+    border: 0;
+    border-bottom: solid 2px #ddd;
+}
+
+.game-set {
+    border-bottom: solid 2px #eee;
+    margin-bottom: 36px;
+}
+
+.game-set:last-of-type {
+    border: none;
+}
+
+.play-list li {
+    margin-bottom: 36px;
+}
+
+.play-list small {
+    color: #aaa;
+    font-size: 14px;
+    font-weight: 100;
+}
+
+.play-list a:hover small {
+    border-bottom: 2px solid #003030;
+    color: #000;
+}
+
+.play-list a div {
+    font-size: 28px;
+}
+
+.load-more {
+    margin-bottom: 48px;
+}
+
+.load-more button {
+    background: #ddd;
+    border: solid 2px #ddd;
+    border-radius: 4px;
+    font-weight: bold;
+    padding: 12px 18px;
+    text-transform: uppercase;
+}

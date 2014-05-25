@@ -1,4 +1,8 @@
+import calendar
 import datetime
+import itertools
+
+import pytz
 
 from flask import Response, json, render_template, request
 from flask.ext.restful import Resource
@@ -18,30 +22,32 @@ def index():
 # Api v1 views
 #
 
+et_tz = pytz.timezone('America/New_York')
+
 @app.route('/api/v1/plays')
 def plays_for_date_range():
-    if not 'start_date' in request.args:
-        max_date = datetime.date.today()
+    if not 'for_date' in request.args:
+        for_date = datetime.date.today()
     else:
         try:
-            max_date = datetime.datetime.strptime(request.args['max_date'],
+            for_date = datetime.datetime.strptime(request.args['for_date'],
                                                     '%Y-%m-%d')
-            max_date = datetime.date(*max_date.timetuple()[:3])
+            for_date = datetime.date(*for_date.timetuple()[:3])
         except ValueError:
             return Response(json.dumps({'error': 'Provide start date as Y-m-d'}),
                             status=400, content_type='application/json')
 
-    min_date = max_date - datetime.timedelta(days=app.config['DAYS_PER_PAGE'])
-
     plays = (Play.query
              .filter(Play.at.between(
-                 min_date.strftime('%Y-%m-%d 00:00:00'),
-                 max_date.strftime('%Y-%m-%d 23:59:59')
+                 for_date.strftime('%Y-%m-%d 00:00:00'),
+                 for_date.strftime('%Y-%m-%d 23:59:59')
              ))
              .order_by(Play.at.desc()))
 
-    data = [
-        {
+    data = []
+
+    for play in plays:
+        desc = {
             'batter': {
                 'name': play.batter.get_full_name(),
                 'team': play.batter_team,
@@ -53,10 +59,9 @@ def plays_for_date_range():
                 'team': play.pitcher_team,
             },
             'url': play.mlbam_url(),
-            'at': play.at,
+            'at': play.at.isoformat(),
         }
-        for play in plays
-    ]
+        data.append(desc)
 
     return Response(json.dumps(data),
                     status=200,

@@ -1,12 +1,60 @@
 <!doctype html>
-<html>
+<html ng-app="homers">
   <head>
     <meta charset="utf-8" />
-    <title>All Home Runs</title>
-    <script src="/static/js/app.js"></script>
+    <title>Home Runs Only</title>
+
+    <script src="//use.typekit.net/qjf2fht.js"></script>
+    <script>try{Typekit.load();}catch(e){}</script>
+
+    <link href="{{ url_for('static', filename='components/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='components/font-awesome/css/font-awesome.css') }}" rel="stylesheet" type="text/css" />
+    <link href="{{ url_for('static', filename='css/master.css') }}" rel="stylesheet" type="text/css" />
+
+    <script src="{{ url_for('static', filename='components/underscore/underscore.js') }}"></script>
+    <script src="{{ url_for('static', filename='components/angular/angular.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='components/angular-route/angular-route.js') }}"></script>
+    <script src="{{ url_for('static', filename='components/angular-resource/angular-resource.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
   </head>
-  <body>
-    <h1>Home runs</h1>
-    <ul></ul>
+  <body ng-controller="plays" ng-init="init()">
+    <header>
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <h4>
+              <span>HOME RUNS ONLY</span>
+            </h4>
+            <p>
+              Updated every 5 minutes.
+            </p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <ul class="play-list list-unstyled" ng-repeat="play in plays">
+            <li>
+              <a target="_blank" href="{$ play.url $}">
+                <small>
+                  {$ play.at | date:"M/d/yyyy @ h:mm a" $}
+                </small><br />
+                <div>{$ play.batter.name $} v. {$ play.pitcher.name $}</div>
+              </a>
+            </li>
+          </ul>
+
+          <div class="load-more">
+            <button ng-click="loadPreviousDate()">
+              <em ng-class="{true:'fa fa-refresh fa-spin'}[loading]"></em>
+              Load more
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

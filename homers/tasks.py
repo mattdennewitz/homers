@@ -33,7 +33,7 @@ def get_player(doc, player_id):
     return (player, player_data.get('team_abbrev'))
 
 
-def import_plays_by_date(for_date=None):
+def import_plays_by_date(for_date=None, parse_only=False):
     """Imports and saves games for date"""
 
     if for_date is None:
@@ -46,7 +46,10 @@ def import_plays_by_date(for_date=None):
     }
 
     # download player info, play-by-play, and media list
-    # download_data([for_date], app.config['DATA_DIR'], target_files.values())
+    if parse_only is False:
+        download_data([for_date],
+                      app.config['DATA_DIR'],
+                      target_files.values())
 
     path_f = os.path.join(app.config['DATA_DIR'],
                           '*%s_%02d_%02d*' % (for_date.year,

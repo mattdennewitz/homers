@@ -17,7 +17,8 @@ def create_db():
 
 @cli.command()
 @click.option('for_date', '-d', required=False)
-def import_todays_games(for_date):
+@click.option('download', '--skip-download/--download', default=False)
+def import_games(for_date, download):
     """Imports games for today"""
 
     if for_date is None:
@@ -26,7 +27,7 @@ def import_todays_games(for_date):
         for_date = datetime.date(
             *datetime.datetime.strptime(for_date, '%Y-%m-%d').timetuple()[:3])
 
-    tasks.import_plays_by_date(for_date)
+    tasks.import_plays_by_date(for_date, download)
 
 
 @cli.command()
