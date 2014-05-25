@@ -5,6 +5,30 @@ for importing home run data.
 
 This app was a lazy Saturday project, and is in no way affiliated with or endorsed by MLB.
 
+## Running this app
+
+### Installing requirements
+
+This app's requirements can be installed via `pip`:
+
+```bash
+$ pip install -r requirements.txt
+```
+
+### Running the web server
+
+Running the Flask development server is as simple as:
+
+```bash
+$ python tasks.py run
+```
+
+### Importing data from MLB
+
+```bash
+$ python tasks.py import_games
+```
+
 ## Data sources
 
 Below are examples of the data sources used:
