@@ -5,7 +5,6 @@ import itertools
 import pytz
 
 from flask import Response, json, render_template, request
-from flask.ext.restful import Resource
 
 from homers import app
 from homers.models import Play
