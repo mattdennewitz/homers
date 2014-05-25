@@ -21,6 +21,10 @@ def create_db():
 def import_games(for_date, download):
     """Imports games for today"""
 
+    # ensure data directory exists, creating if not
+    if not os.path.exists(app.config['DATA_DIR']):
+        os.mkdir(app.config['DATA_DIR'])
+
     if for_date is None:
         for_date = datetime.date.today()
     else:
