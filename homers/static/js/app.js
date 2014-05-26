@@ -33,7 +33,12 @@ app.config(function($interpolateProvider,
 
 
 app.factory('Play', ['$resource', function($resource) {
-    return $resource('/api/v1/plays');
+    return $resource('/api/v1/plays', {}, {
+        query: {
+            method: 'GET',
+            isArray: false
+        }
+    });
 }]);
 
 
@@ -42,13 +47,24 @@ app.controller('plays', function($scope, Play) {
     $scope.loading = false;
 
     $scope.loadPage = function(action) {
-        Page.query({page: $scope.page}, function(objects) {
+        $scope.loading = true;
+
+        Play.query({page: $scope.page}, function(response) {
             if(action == 'append') {
                 var plays = $scope.plays.slice(0);
-                plays.extend(objects);
+                plays.extend(response.plays);
                 $scope.plays = plays;
+            } else {
+                $scope.plays = response.plays;
             }
+
+            $scope.page = response.meta.next_page_number;
+            $scope.loading = false;
         });
+    }
+
+    $scope.init = function() {
+        $scope.loadPage();
     }
 });
 

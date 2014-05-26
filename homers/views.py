@@ -47,12 +47,18 @@ def plays():
 
     offset = (page_number - 1) * app.config['PER_PAGE']
     limit = offset + app.config['PER_PAGE']
-    plays = Play.query.slice(offset, limit)
+    plays = Play.query.order_by(Play.at.desc()).slice(offset, limit)
+
+    if (page_number + 1) >= page_ct:
+        next_page_number = None
+    else:
+        next_page_number = page_number + 1
 
     resp = {
         'meta': {
             'total': total_ct,
-            'pages': page_ct
+            'pages': page_ct,
+            'next_page_number': next_page_number,
         },
         'plays': [serialize_play(play) for play in plays]
     }
