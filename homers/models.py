@@ -66,6 +66,10 @@ class Play(db.Model):
         elif isinstance(at, basestring) and at.endswith('Z'):
             self.at = dateutil.parser.parse(at)
 
+    def __repr__(self):
+        return '%s v. %s' % (self.batter.get_full_name(),
+                             self.pitcher.get_full_name())
+
     def mlbam_url(self):
         return ('http://mlb.mlb.com/video/play.jsp?content_id=%s' %
                 self.content_id)

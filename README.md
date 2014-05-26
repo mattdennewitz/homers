@@ -89,3 +89,8 @@ and joining by the shared field, `sv_id`.
 
 - `sv_id` in pbp data: `game/inning/[top/bottom]/atbat/pitch[sv_id]`
 - `sv_id` in media list: `highlights/media/keywords/keyword[sv_id]`
+
+## Todo
+
+- [ ] Re-enable "homers for date" view
+- [ ] Player filtering

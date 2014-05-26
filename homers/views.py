@@ -1,9 +1,13 @@
+import urlparse
 import datetime
 import math
 
 import pytz
 
-from flask import Response, abort, json, redirect, render_template, request
+from flask import (Response, abort, json, redirect, render_template,
+                   request, url_for)
+
+from werkzeug.contrib.atom import AtomFeed
 
 from homers import app, db
 from homers.http import JsonResponse
@@ -35,6 +39,30 @@ def view_play(content_id):
     db.session.commit()
 
     return redirect(play.mlbam_url())
+
+
+@app.route('/homers.atom')
+def feed():
+    """Returns 50 latest plays"""
+
+    feed = AtomFeed('Home Runs Only',
+                    feed_url=request.url,
+                    url=request.url_root)
+
+    plays = Play.query.order_by(Play.at.desc()).limit(50)
+
+    for play in plays:
+        feed.add(repr(play),
+                 'Home run hit by %s off of %s' % (
+                     play.batter.get_full_name(),
+                     play.pitcher.get_full_name()),
+                 content_type='html',
+                 author=play.pitcher.get_full_name(),
+                 url=url_for('view_play', content_id=play.content_id),
+                 updated=play.at,
+                 published=play.at)
+
+    return feed.get_response()
 
 
 #
