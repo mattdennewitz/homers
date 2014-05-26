@@ -38,7 +38,8 @@ def import_games(download, date_set=None, year=None, workers=None):
     elif date_set:
         date_set = [make_date(v) for v in date_set]
     else:
-        date_set = [datetime.date.today()]
+        today = datetime.date.today()
+        date_set = [today, today - datetime.timedelta(days=1)]
 
     # spread out downloads across a few processes
     pool = multiprocessing.Pool(workers)
