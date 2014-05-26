@@ -7,6 +7,8 @@ This app was a lazy Saturday project, and is in no way affiliated with or endors
 
 ## Running this app
 
+First, fork and clone this repo.
+
 ### Installing requirements
 
 This app's requirements can be installed via `pip`:
@@ -15,18 +17,61 @@ This app's requirements can be installed via `pip`:
 $ pip install -r requirements.txt
 ```
 
+### Set up the database
+
+This app was written for and testing using Postgres,
+but should be compatible with other database platforms
+through SQLAlchemy.
+
+Create a database, and then
+
+1. Update `SQLALCHEMY_DATABASE_URI` in either `homers.config`
+   or `homers.local_config`. Alternately, this app will read
+   `DATABASE_URL` from your environment before trying the config.
+2. Run the `create_db` task:
+
+```bash
+$ python tasks.py create_db
+```
+
+After these steps, you should have an empty database.
+
+### Importing data from MLB
+
+This app comes with the ability to import game data from MLBAM.
+This importer is run through `tasks.py`:
+
+```bash
+$ python tasks.py import_games
+```
+
+Games can be imported one of two ways: by day and by year.
+
+#### Games by day
+
+To import games for one or more dates, provide one or more `-d` arguments
+to `import_games`. Dates given should be given as `YYYY-MM-DD`.
+
+```bash
+$ python tasks.py import_games -d 2014-05-01 -d 2014-04-01
+```
+
+#### Games by year
+
+To import games for an entire year, use the `-y` flag:
+
+```bash
+$ python tasks.py import_games -y 2014
+```
+
+Imports are powered by [mlbma-utils](github.com/mattdennewitz/mlbam-utils).
+
 ### Running the web server
 
 Running the Flask development server is as simple as:
 
 ```bash
 $ python tasks.py run
-```
-
-### Importing data from MLB
-
-```bash
-$ python tasks.py import_games
 ```
 
 ## Data sources

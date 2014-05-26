@@ -10,9 +10,19 @@ def make_date(date):
 
 
 def generate_year_series(year):
-    current_date = datetime.date.today()
-    yield current_date
+    """Generate a series of dates within, roughly, the entire season.
+    """
 
-    for step in range(0, (current_date.timetuple().tm_yday - 1)):
-        current_date -= datetime.timedelta(days=1)
+    today = datetime.date.today()
+
+    if year == today.year:
+        current_date = today
+    else:
+        # arbitrary end date
+        current_date = datetime.date(year, 11, 15)
+
+    min_date = datetime.date(year, 3, 1)
+
+    while current_date >= min_date:
         yield current_date
+        current_date -= datetime.timedelta(days=1)
