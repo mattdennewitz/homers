@@ -44,6 +44,10 @@ input[type="date"] {
     border: none;
 }
 
+.play-list {
+    text-align: center;
+}
+
 .play-list li {
     margin-bottom: 36px;
 }
@@ -55,7 +59,6 @@ input[type="date"] {
 }
 
 .play-list a:hover small {
-    border-bottom: 2px solid #003030;
     color: #000;
 }
 
@@ -74,4 +77,20 @@ input[type="date"] {
     font-weight: bold;
     padding: 12px 18px;
     text-transform: uppercase;
+}
+
+@media (max-width: 480px) {
+    .play-list {
+        text-align: left;
+    }
+
+    span.pusher {
+        display: block;
+        height: 0px;
+    }
+
+    button {
+        display: block;
+        width: 100%;
+    }
 }

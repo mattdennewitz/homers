@@ -30,6 +30,9 @@
             <p>
               Updated every 10 minutes.
             </p>
+            <p class="help-block">
+              <em>Not affiliated with MLB.</em>
+            </p>
           </div>
         </div>
       </div>
@@ -37,19 +40,19 @@
 
     <div class="container">
       <div class="row">
-        <div class="col-md-12 text-center">
+        <div class="col-md-12">
           <ul class="play-list list-unstyled" ng-repeat="play in plays">
             <li>
               <a target="_blank" href="{$ play.url $}">
                 <small>
                   {$ play.at | date:"M/d/yyyy @ h:mm a" $}
                 </small><br />
-                <div>{$ play.batter.name $} v. {$ play.pitcher.name $}</div>
+                <div>{$ play.batter.name $} <small>vs.</small> <span class="pusher"></span>{$ play.pitcher.name $}</div>
               </a>
             </li>
           </ul>
 
-          <div class="load-more">
+          <div class="load-more text-center">
             <button ng-click="loadPage('append')" ng-disabled="loading">
               <em ng-class="{true:'fa fa-refresh fa-spin'}[loading]"></em>
               {$ loading ? "Loading ..." : "Load More"  $}
