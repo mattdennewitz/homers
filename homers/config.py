@@ -10,6 +10,7 @@ DATA_DIR = os.path.realpath(
                  'game-data'))
 
 # app settings
+PER_PAGE = 20
 DAYS_PER_PAGE = 7
 
 

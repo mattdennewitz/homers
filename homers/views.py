@@ -1,13 +1,14 @@
-import calendar
 import datetime
-import itertools
+import math
 
 import pytz
 
 from flask import Response, json, render_template, request
 
 from homers import app
+from homers.http import JsonResponse
 from homers.models import Play
+from homers.serializers import serialize_play
 
 
 @app.route('/')
@@ -24,12 +25,51 @@ def index():
 et_tz = pytz.timezone('America/New_York')
 
 @app.route('/api/v1/plays')
+def plays():
+    """Returns paginated list of home runs.
+
+    Note: this is also a shining example of why API frameworks
+    are fantastic inventions.
+    """
+
+    try:
+        page_number = int(request.args.get('page', 1))
+        if page_number < 1:
+            page_number = 1
+    except ValueError:
+        page_number = 1
+
+    total_ct = Play.query.count()
+    page_ct = int(math.ceil(float(total_ct) / app.config['PER_PAGE']))
+
+    if page_number > page_ct:
+        return Response(status=404)
+
+    offset = (page_number - 1) * app.config['PER_PAGE']
+    limit = offset + app.config['PER_PAGE']
+    plays = Play.query.slice(offset, limit)
+
+    resp = {
+        'meta': {
+            'total': total_ct,
+            'pages': page_ct
+        },
+        'plays': [serialize_play(play) for play in plays]
+    }
+
+    return JsonResponse(resp)
+
+
+@app.route('/api/v1/plays/date')
 def plays_for_date_range():
-    if not 'for_date' in request.args:
+    """Returns a list of all home runs for a certain date.
+    """
+
+    if not 'for' in request.args:
         for_date = datetime.date.today()
     else:
         try:
-            for_date = datetime.datetime.strptime(request.args['for_date'],
+            for_date = datetime.datetime.strptime(request.args['for'],
                                                     '%Y-%m-%d')
             for_date = datetime.date(*for_date.timetuple()[:3])
         except ValueError:
@@ -43,25 +83,6 @@ def plays_for_date_range():
              ))
              .order_by(Play.at.desc()))
 
-    data = []
+    data = [serialize_play(play) for play in plays]
 
-    for play in plays:
-        desc = {
-            'batter': {
-                'name': play.batter.get_full_name(),
-                'team': play.batter_team,
-                'id': play.batter_id,
-            },
-            'pitcher': {
-                'name': play.pitcher.get_full_name(),
-                'id': play.pitcher_id,
-                'team': play.pitcher_team,
-            },
-            'url': play.mlbam_url(),
-            'at': play.at.isoformat(),
-        }
-        data.append(desc)
-
-    return Response(json.dumps(data),
-                    status=200,
-                    content_type='application/json')
+    return JsonResponse(data)

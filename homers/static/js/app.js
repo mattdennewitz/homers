@@ -18,15 +18,15 @@ app.config(function($interpolateProvider,
     $interpolateProvider.startSymbol('{$');
     $interpolateProvider.endSymbol('$}');
 
-    // $routeProvider
-    //     .when('/', {
-    //         templateUrl: 'stacks/partials/pick_games.html',
-    //         controller: 'pickGames'
-    //     })
-    //     .when('/stats', {
-    //         templateUrl: 'stacks/partials/list_user_games.html',
-    //         controller: 'userGames'
-    //     });
+    $routeProvider
+        .when('/', {
+            templateUrl: 'stacks/partials/pick_games.html',
+            controller: 'pickGames'
+        })
+        .when('/stats', {
+            templateUrl: 'stacks/partials/list_user_games.html',
+            controller: 'userGames'
+        });
 
     // $locationProvider.html5Mode(true);
 });
@@ -38,13 +38,30 @@ app.factory('Play', ['$resource', function($resource) {
 
 
 app.controller('plays', function($scope, Play) {
-    $scope.forDate = (new Date()).ymd();
+    $scope.page = 1;
+    $scope.loading = false;
+
+    $scope.loadPage = function(action) {
+        Page.query({page: $scope.page}, function(objects) {
+            if(action == 'append') {
+                var plays = $scope.plays.slice(0);
+                plays.extend(objects);
+                $scope.plays = plays;
+            }
+        });
+    }
+});
+
+
+/*
+app.controller('playsOnDate', function($scope, Play) {
+    $scope.page = 1;
     $scope.loading = false;
 
     $scope.getPlaysForDate = function(action) {
         $scope.loading = true;
 
-        Play.query({for_date: $scope.forDate}, function(resp) {
+        Play.query({page: $scope.page}, function(resp) {
             if(action == 'append') {
                 var plays = $scope.plays.slice(0);
                 plays.extend(resp);
@@ -57,8 +74,7 @@ app.controller('plays', function($scope, Play) {
         });
     }
 
-    $scope.loadPreviousDate = function() {
-        var prevDate = new Date($scope.forDate + ' 00:00:00');
+    $scope.loadPrevious = function() {
         prevDate.setDate(prevDate.getDate() - 1);
         $scope.forDate = prevDate.ymd();
         $scope.getPlaysForDate('append')
@@ -68,3 +84,4 @@ app.controller('plays', function($scope, Play) {
         $scope.getPlaysForDate();
     }
 });
+*/
