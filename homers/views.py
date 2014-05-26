@@ -3,11 +3,11 @@ import math
 
 import pytz
 
-from flask import Response, json, render_template, request
+from flask import Response, abort, json, redirect, render_template, request
 
-from homers import app
+from homers import app, db
 from homers.http import JsonResponse
-from homers.models import Play
+from homers.models import Play, PlayView
 from homers.serializers import serialize_play
 
 
@@ -16,6 +16,25 @@ def index():
     """Displays list of homers"""
 
     return render_template('index.html')
+
+
+@app.route('/view/<int:content_id>')
+def view_play(content_id):
+    """Record a visit and redirect"""
+
+    play = Play.query.filter_by(content_id=content_id).first_or_404()
+
+    # record the hit
+    pv = PlayView.query.get(content_id)
+    if pv is None:
+        pv = PlayView(play_id=content_id, ct=1)
+        db.session.add(pv)
+    else:
+        pv.ct += 1
+
+    db.session.commit()
+
+    return redirect(play.mlbam_url())
 
 
 #
@@ -43,7 +62,7 @@ def plays():
     page_ct = int(math.ceil(float(total_ct) / app.config['PER_PAGE']))
 
     if page_number > page_ct:
-        return Response(status=404)
+        abort(404)
 
     offset = (page_number - 1) * app.config['PER_PAGE']
     limit = offset + app.config['PER_PAGE']

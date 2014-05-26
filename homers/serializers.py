@@ -1,3 +1,6 @@
+from flask import url_for
+
+
 def serialize_play(play):
     return {
         'batter': {
@@ -10,6 +13,6 @@ def serialize_play(play):
                 'id': play.pitcher_id,
                 'team': play.pitcher_team,
             },
-            'url': play.mlbam_url(),
+            'url': url_for('view_play', content_id=play.content_id),
         'at': play.at.isoformat(),
     }

@@ -69,3 +69,16 @@ class Play(db.Model):
     def mlbam_url(self):
         return ('http://mlb.mlb.com/video/play.jsp?content_id=%s' %
                 self.content_id)
+
+
+class PlayView(db.Model):
+    __tablename__ = 'play_views'
+
+    play_id = db.Column(db.Integer, db.ForeignKey('plays.content_id'),
+                        unique=True, primary_key=True)
+    ct = db.Column(db.Integer)
+
+    play = db.relationship('Play', foreign_keys=play_id)
+
+    def __repr__(self):
+        return '%s - %s view(s)' % (self.play.content_id, self.ct)
