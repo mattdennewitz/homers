@@ -6,6 +6,9 @@ from flask import url_for
 et_tz = pytz.timezone('America/New_York')
 
 def serialize_play(play):
+    # TODO: quit storing times as UTC when they're really ET
+    play_time = play.at.replace(tzinfo=et_tz)
+
     return {
         'batter': {
             'name': play.batter.get_full_name(),
@@ -18,5 +21,5 @@ def serialize_play(play):
                 'team': play.pitcher_team,
             },
             'url': url_for('view_play', content_id=play.content_id),
-        'at': et_tz.localize(play.at).strftime('%Y-%m-%dT%H:%M:%S%z'),
+        'at': play_time.strftime('%Y-%m-%dT%H:%M:%S%z'),
     }
