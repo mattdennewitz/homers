@@ -6,8 +6,8 @@ from flask import url_for
 et_tz = pytz.timezone('America/New_York')
 
 def serialize_play(play):
-    # TODO: quit storing times as UTC when they're really ET
-    play_time = play.at.replace(tzinfo=et_tz)
+    play_time = pytz.utc.localize(play.at)
+    play_time = play_time.astimezone(et_tz)
 
     return {
         'batter': {
