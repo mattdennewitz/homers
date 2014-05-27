@@ -18,5 +18,5 @@ def serialize_play(play):
                 'team': play.pitcher_team,
             },
             'url': url_for('view_play', content_id=play.content_id),
-        'at': et_tz.localize(play.at).isoformat(),
+        'at': et_tz.localize(play.at).strftime('%Y-%m-%dT%H:%M:%S%z'),
     }
