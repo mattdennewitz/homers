@@ -2,8 +2,6 @@ import urlparse
 import datetime
 import math
 
-import pytz
-
 from flask import (Response, abort, json, redirect, render_template,
                    request, url_for)
 
@@ -70,8 +68,6 @@ def feed():
 #
 # Api v1 views
 #
-
-et_tz = pytz.timezone('America/New_York')
 
 @app.route('/api/v1/plays')
 def plays():

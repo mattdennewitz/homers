@@ -1,5 +1,9 @@
+import pytz
+
 from flask import url_for
 
+
+et_tz = pytz.timezone('America/New_York')
 
 def serialize_play(play):
     return {
@@ -14,5 +18,5 @@ def serialize_play(play):
                 'team': play.pitcher_team,
             },
             'url': url_for('view_play', content_id=play.content_id),
-        'at': play.at.isoformat(),
+        'at': et_tz.localize(play.at).isoformat(),
     }
