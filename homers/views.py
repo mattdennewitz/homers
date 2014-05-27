@@ -58,7 +58,9 @@ def feed():
                      play.pitcher.get_full_name()),
                  content_type='html',
                  author=play.pitcher.get_full_name(),
-                 url=url_for('view_play', content_id=play.content_id),
+                 url=urlparse.urljoin(
+                     request.url_root,
+                     url_for('view_play', content_id=play.content_id)),
                  updated=play.at,
                  published=play.at)
 
