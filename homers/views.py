@@ -50,10 +50,13 @@ def feed():
     plays = Play.query.order_by(Play.at.desc()).limit(50)
 
     for play in plays:
-        feed.add(repr(play),
-                 'Home run hit by %s off of %s' % (
+        feed.add(play.catchy_journalist_title(),
+                 'Home run hit by %s off of %s on %s at %s' % (
                      play.batter.get_full_name(),
-                     play.pitcher.get_full_name()),
+                     play.pitcher.get_full_name(),
+                     play.at.strftime('%B %d, %Y'),
+                     play.at.strftime('%I:%M %p'),
+                 ),
                  content_type='html',
                  author=play.pitcher.get_full_name(),
                  url=urlparse.urljoin(

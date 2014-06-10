@@ -5,6 +5,7 @@ import datetime
 import dateutil.parser
 
 from homers import db
+from homers.desc import phrase_ring
 
 
 class Player(db.Model):
@@ -39,6 +40,7 @@ class Play(db.Model):
     play_type = db.Column(db.Text)
     at = db.Column(db.DateTime)
     sv_id = db.Column(db.String(24))
+    runs_on_play = db.Column(db.Integer())
 
     # media-specific info
     headline = db.Column(db.Text)
@@ -49,7 +51,7 @@ class Play(db.Model):
 
     def __init__(self, batter_id, pitcher_id,
                  batter_team, pitcher_team,
-                 play_type, at, sv_id,
+                 play_type, at, sv_id, runs_on_play,
                  content_id, headline, blurb):
         self.batter_id = batter_id
         self.batter_team = batter_team
@@ -57,6 +59,7 @@ class Play(db.Model):
         self.pitcher_team = pitcher_team
         self.play_type = play_type
         self.sv_id = sv_id
+        self.runs_on_play = runs_on_play
         self.content_id = content_id
         self.headline = headline
         self.blurb = blurb
@@ -69,6 +72,22 @@ class Play(db.Model):
     def __repr__(self):
         return '%s v. %s' % (self.batter.get_full_name(),
                              self.pitcher.get_full_name())
+
+    def catchy_journalist_title(self):
+        if self.runs_on_play == 4:
+            return '%s hits a grand slam off of %s' % (
+                self.batter.get_full_name(),
+                self.pitcher.get_full_name(),
+            )
+
+        key = (self.batter.get_full_name()
+               + self.pitcher.get_full_name())
+        phrase = phrase_ring.get_node(key)
+
+        return phrase % {
+            'batter': self.batter.get_full_name(),
+            'pitcher': self.pitcher.get_full_name()
+        }
 
     def mlbam_url(self):
         return ('http://mlb.mlb.com/video/play.jsp?content_id=%s' %

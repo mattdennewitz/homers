@@ -66,7 +66,9 @@
                 <small>
                   {$ play.at | date:"M/d/yyyy @ h:mm a" $}
                 </small><br />
-                <div>{$ play.batter.name $} <small>vs.</small> <span class="pusher"></span>{$ play.pitcher.name $}</div>
+                <div>
+                  {$ play.title $}
+                </div>
               </a>
             </li>
           </ul>

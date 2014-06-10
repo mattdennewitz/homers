@@ -93,6 +93,9 @@ def import_plays_by_date(for_date=None, parse_only=False):
 
             content_id = highlight.get('id')
 
+            runs_on_play = len(atbat.xpath('./runner[@score="T"]'))
+            print runs_on_play
+
             # have we seen this play?
             if Play.query.filter_by(content_id=content_id).count() > 0:
                 print 'Play %s already logged. Skipping.' % content_id
@@ -110,6 +113,7 @@ def import_plays_by_date(for_date=None, parse_only=False):
                         play_type = 'Home Run',
                         at = atbat.get('start_tfs_zulu'),
                         sv_id = sv_id,
+                        runs_on_play = runs_on_play,
                         headline = highlight.get('headline'),
                         blurb = highlight.get('blurb'))
 
