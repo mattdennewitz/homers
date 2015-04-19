@@ -17,5 +17,8 @@ phrases = (
     '%(batter)s goes yard off of %(pitcher)s',
 )
 
+phrases = map(lambda v: v + ' #mlb #%(batter_team)s #%(pitcher_team)s',
+              phrases)
+
 phrase_ring = hash_ring.HashRing(phrases)
 
