@@ -86,7 +86,9 @@ class Play(db.Model):
 
         return phrase % {
             'batter': self.batter.get_full_name(),
-            'pitcher': self.pitcher.get_full_name()
+            'pitcher': self.pitcher.get_full_name(),
+            'batter_team': self.batter_team,
+            'pitcher_team': self.pitcher_team,
         }
 
     def mlbam_url(self):

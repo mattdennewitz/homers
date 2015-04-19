@@ -51,11 +51,10 @@ def feed():
 
     for play in plays:
         feed.add(play.catchy_journalist_title(),
-                 'Home run hit by %s off of %s on %s at %s' % (
-                     play.batter.get_full_name(),
-                     play.pitcher.get_full_name(),
-                     play.at.strftime('%B %d, %Y'),
-                     play.at.strftime('%I:%M %p'),
+                 'Home run hit by {batter} off of {pitcher} on {date}'.format(
+                     batter=play.batter.get_full_name(),
+                     pitcher=play.pitcher.get_full_name(),
+                     date=play.at.strftime('%B %d, %Y'),
                  ),
                  content_type='html',
                  author=play.pitcher.get_full_name(),
