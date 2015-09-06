@@ -29,7 +29,8 @@ class Player(db.Model):
 
 
 class Play(db.Model):
-    """Represents a play, who was involved, and the time"""
+    """Represents a play, who was involved, and the time
+    """
     __tablename__ = 'plays'
 
     content_id = db.Column(db.Integer, primary_key=True)
@@ -41,6 +42,7 @@ class Play(db.Model):
     at = db.Column(db.DateTime)
     sv_id = db.Column(db.String(24))
     runs_on_play = db.Column(db.Integer())
+    video_url = db.Column(db.Text)
 
     # media-specific info
     headline = db.Column(db.Text)
@@ -52,13 +54,15 @@ class Play(db.Model):
     def __init__(self, batter_id, pitcher_id,
                  batter_team, pitcher_team,
                  play_type, at, sv_id, runs_on_play,
-                 content_id, headline, blurb):
+                 content_id, headline, blurb,
+                 video_url):
         self.batter_id = batter_id
         self.batter_team = batter_team
         self.pitcher_id = pitcher_id
         self.pitcher_team = pitcher_team
         self.play_type = play_type
         self.sv_id = sv_id
+        self.video_url = video_url
         self.runs_on_play = runs_on_play
         self.content_id = content_id
         self.headline = headline
@@ -73,37 +77,6 @@ class Play(db.Model):
         return '%s v. %s' % (self.batter.get_full_name(),
                              self.pitcher.get_full_name())
 
-    def catchy_journalist_title(self):
-        if self.runs_on_play == 4:
-            return '%s hits a grand slam off of %s' % (
-                self.batter.get_full_name(),
-                self.pitcher.get_full_name(),
-            )
-
-        key = (self.batter.get_full_name()
-               + self.pitcher.get_full_name())
-        phrase = phrase_ring.get_node(key)
-
-        return phrase % {
-            'batter': self.batter.get_full_name(),
-            'pitcher': self.pitcher.get_full_name(),
-            'batter_team': self.batter_team,
-            'pitcher_team': self.pitcher_team,
-        }
-
     def mlbam_url(self):
         return ('http://mlb.mlb.com/video/play.jsp?content_id=%s' %
                 self.content_id)
-
-
-class PlayView(db.Model):
-    __tablename__ = 'play_views'
-
-    play_id = db.Column(db.Integer, db.ForeignKey('plays.content_id'),
-                        unique=True, primary_key=True)
-    ct = db.Column(db.Integer)
-
-    play = db.relationship('Play', foreign_keys=play_id)
-
-    def __repr__(self):
-        return '%s - %s view(s)' % (self.play.content_id, self.ct)

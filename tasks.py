@@ -23,7 +23,8 @@ def create_db():
 @click.option('date_set', '-d', required=False, multiple=True)
 @click.option('year', '-y', type=click.INT, required=False)
 @click.option('workers', '-w', type=click.INT, required=False)
-def import_games(download, date_set=None, year=None, workers=None):
+def import_games(download, date_set=None, year=None, workers=None,
+                 parse_only=False):
     """Imports games for today"""
 
     # ensure data directory exists, creating if not
@@ -38,14 +39,15 @@ def import_games(download, date_set=None, year=None, workers=None):
     elif date_set:
         date_set = [make_date(v) for v in date_set]
     else:
-        today = datetime.date.today()
-        date_set = [today, today - datetime.timedelta(days=1)]
+        date_set = [datetime.date.today()]
+        workers = 1
 
     # spread out downloads across a few processes
     pool = multiprocessing.Pool(workers)
 
     for date in date_set:
-        pool.apply_async(tasks.import_plays_by_date, [date, download])
+        pool.apply_async(tasks.import_plays_by_date,
+                         [date, download])
 
     pool.close()
     pool.join()

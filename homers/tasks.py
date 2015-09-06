@@ -92,9 +92,10 @@ def import_plays_by_date(for_date=None, parse_only=False):
                 continue
 
             content_id = highlight.get('id')
-
             runs_on_play = len(atbat.xpath('./runner[@score="T"]'))
-            print runs_on_play
+            video_url = highlight.find('./url').text
+            headline = highlight.find('./headline').text
+            blurb = highlight.find('./blurb').text
 
             # have we seen this play?
             if Play.query.filter_by(content_id=content_id).count() > 0:
@@ -113,9 +114,10 @@ def import_plays_by_date(for_date=None, parse_only=False):
                         play_type = 'Home Run',
                         at = atbat.get('start_tfs_zulu'),
                         sv_id = sv_id,
+                        video_url = video_url,
                         runs_on_play = runs_on_play,
-                        headline = highlight.get('headline'),
-                        blurb = highlight.get('blurb'))
+                        headline = headline,
+                        blurb = blurb)
 
             db.session.add(play)
             db.session.commit()

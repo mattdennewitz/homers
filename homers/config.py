@@ -12,6 +12,8 @@ DATA_DIR = os.path.realpath(
                  os.pardir,
                  'game-data'))
 
+PER_PAGE = 25
+
 # allow for config overrides
 try:
     from local_config import *
