@@ -1,13 +1,14 @@
 # Home Runs
 
-This is a Flask app that links to every home run hit. It comes with a few commands
-for importing home run data.
+This is a Flask app that links to every home run hit.
+It comes with a few commands for importing home run data.
 
-This app was a lazy Saturday project, and is in no way affiliated with or endorsed by MLB.
+This app was a lazy Saturday project, and is in no way affiliated
+with or endorsed by MLB or Saturn.
 
 ## Running this app
 
-First, fork and clone this repo.
+Clone this repo to get started.
 
 ### Installing requirements
 
@@ -27,14 +28,14 @@ Create a database, and then
 
 1. Update `SQLALCHEMY_DATABASE_URI` in either `homers.config`
    or `homers.local_config`. Alternately, this app will read
-   `DATABASE_URL` from your environment before trying the config.
+   `HOMERS_DATABASE_URI` from your environment before trying the config.
 2. Run the `create_db` task:
 
 ```bash
 $ python tasks.py create_db
 ```
 
-After these steps, you should have an empty database.
+Once completed, you'll have a database ready to house some homers.
 
 ### Importing data from MLB
 
@@ -89,8 +90,3 @@ and joining by the shared field, `sv_id`.
 
 - `sv_id` in pbp data: `game/inning/[top/bottom]/atbat/pitch[sv_id]`
 - `sv_id` in media list: `highlights/media/keywords/keyword[sv_id]`
-
-## Todo
-
-- [ ] Re-enable "homers for date" view
-- [ ] Player filtering

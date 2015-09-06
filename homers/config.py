@@ -5,7 +5,7 @@ import os
 DEBUG = True
 
 SQLALCHEMY_DATABASE_URI = os.environ.get(
-    'DATABASE_URL', 'postgres://localhost/homers')
+    'HOMERS_DATABASE_URI', 'postgres://localhost/homers')
 
 DATA_DIR = os.path.realpath(
     os.path.join(os.path.dirname(__file__),

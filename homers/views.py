@@ -46,7 +46,13 @@ def random_dinger():
     """Returns a random home run
     """
 
-    play = Play.query.order_by(func.random()).first()
+    play = Play.query.order_by(func.random())
+
+    team = request.args.get('team')
+    if team is not None:
+        play = play.filter(Play.batter_team == team)
+
+    play = play.first()
 
     return JsonResponse(serialize_play(play))
 
@@ -63,15 +69,22 @@ def plays():
     except ValueError:
         page_number = 1
 
-    total_ct = Play.query.count()
+    plays = Play.query
+
+    team = request.args.get('team')
+    if team is not None:
+        plays = plays.filter(Play.batter_team == team)
+
+    offset = (page_number - 1) * app.config['PER_PAGE']
+    limit = offset + app.config['PER_PAGE']
+
+    total_ct = plays.count()
     page_ct = int(math.ceil(float(total_ct) / app.config['PER_PAGE']))
 
     if page_number > page_ct:
         abort(404)
 
-    offset = (page_number - 1) * app.config['PER_PAGE']
-    limit = offset + app.config['PER_PAGE']
-    plays = Play.query.order_by(Play.at.desc()).slice(offset, limit)
+    plays = plays.order_by(Play.at.desc()).slice(offset, limit)
 
     if (page_number + 1) >= page_ct:
         next_page_number = None
