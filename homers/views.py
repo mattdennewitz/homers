@@ -69,17 +69,22 @@ def plays():
     except ValueError:
         page_number = 1
 
+    try:
+        limit = int(request.args.get('limit', app.config['PER_PAGE']))
+    except ValueError:
+        limit = app.config['PER_PAGE']
+
     plays = Play.query
 
     team = request.args.get('team')
     if team is not None:
         plays = plays.filter(Play.batter_team == team)
 
-    offset = (page_number - 1) * app.config['PER_PAGE']
-    limit = offset + app.config['PER_PAGE']
+    offset = (page_number - 1) * limit
+    limit = offset + limit
 
     total_ct = plays.count()
-    page_ct = int(math.ceil(float(total_ct) / app.config['PER_PAGE']))
+    page_ct = int(math.ceil(float(total_ct) / limit))
 
     if page_number > page_ct:
         abort(404)
